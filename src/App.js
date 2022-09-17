@@ -90,7 +90,9 @@ function App() {
 
     //Remove
     const onRemove = (targetId) => {
-        dispatch({ type: "REMOVE", targetId });
+        if (window.confirm(`${targetId}번 글을 삭제 하시겠습니까?`)) {
+            dispatch({ type: "REMOVE", targetId });
+        }
     };
 
     //Edit
