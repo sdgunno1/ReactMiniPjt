@@ -1,4 +1,4 @@
-import React, { useReducer, useRef } from "react";
+import React, { useEffect, useReducer, useRef } from "react";
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
@@ -31,48 +31,27 @@ const reducer = (state, action) => {
             return state;
     }
 
+    localStorage.setItem("diary", JSON.stringify(newState));
     return newState;
 };
 
 export const DiaryStateContext = React.createContext();
 export const DiaryDispatchContext = React.createContext();
 
-const dummyData = [
-    {
-        id: 1,
-        emotion: 1,
-        content: "오늘의 일기 1번",
-        date: 1662948473005,
-    },
-    {
-        id: 2,
-        emotion: 2,
-        content: "오늘의 일기 2번",
-        date: 1662948473004,
-    },
-    {
-        id: 3,
-        emotion: 3,
-        content: "오늘의 일기 3번",
-        date: 1662948473003,
-    },
-    {
-        id: 4,
-        emotion: 4,
-        content: "오늘의 일기 4번",
-        date: 1662948473002,
-    },
-    {
-        id: 5,
-        emotion: 5,
-        content: "오늘의 일기 5번",
-        date: 1662948473001,
-    },
-];
-
 function App() {
-    const [data, dispatch] = useReducer(reducer, dummyData);
-    const dataId = useRef(6);
+    const [data, dispatch] = useReducer(reducer, []);
+    const dataId = useRef(0);
+
+    useEffect(() => {
+        const localData = localStorage.getItem("diary");
+        if (localData) {
+            const diaryList = JSON.parse(localData).sort(
+                (a, b) => parseInt(b.id) - parseInt(a.id)
+            );
+            dataId.current = parseInt(diaryList[0].id) + 1;
+            dispatch({ type: "INIT", data: diaryList });
+        }
+    }, []);
 
     //Create
     const onCreate = (date, content, emotion) => {
@@ -90,9 +69,7 @@ function App() {
 
     //Remove
     const onRemove = (targetId) => {
-        if (window.confirm(`${targetId}번 글을 삭제 하시겠습니까?`)) {
-            dispatch({ type: "REMOVE", targetId });
-        }
+        dispatch({ type: "REMOVE", targetId });
     };
 
     //Edit
