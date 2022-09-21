@@ -36,8 +36,9 @@ const Home = () => {
     }, [diaryList, curDate]);
 
     useEffect(() => {
-        console.log(data);
-    }, [data]);
+        const titleElement = document.getElementsByTagName("title")[0];
+        titleElement.innerHTML = `감정 일기장`;
+    }, []);
 
     const increaseMonth = () => {
         setCurDate(
