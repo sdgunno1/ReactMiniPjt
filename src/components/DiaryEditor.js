@@ -54,7 +54,10 @@ const DiaryEditor = ({ isEdit, originData }) => {
 
     useEffect(() => {
         if (isEdit) {
-            setDate(getStringDate(new Date(parseInt(originData.date))));
+            const diaryDate = new Date(originData.date);
+            diaryDate.setDate(diaryDate.getDate() + 1);
+            console.log(getStringDate(diaryDate));
+            setDate(getStringDate(diaryDate));
             setEmotion(originData.emotion);
             setContent(originData.content);
         }

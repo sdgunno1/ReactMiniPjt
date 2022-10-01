@@ -31,7 +31,7 @@ const reducer = (state, action) => {
             return state;
     }
 
-    localStorage.setItem("diary", JSON.stringify(newState));
+    //localStorage.setItem("diary", JSON.stringify(newState));
     return newState;
 };
 
@@ -42,32 +42,57 @@ function App() {
     const [data, dispatch] = useReducer(reducer, []);
     const dataId = useRef(1);
 
-    useEffect(() => {
-        const localData = localStorage.getItem("diary");
-        if (localData) {
-            const diaryList = JSON.parse(localData).sort(
-                (a, b) => parseInt(b.id) - parseInt(a.id)
-            );
+    // useEffect(() => {
+    //     const localData = localStorage.getItem("diary");
+    //     if (localData) {
+    //         const diaryList = JSON.parse(localData).sort(
+    //             (a, b) => parseInt(b.id) - parseInt(a.id)
+    //         );
 
-            if (diaryList.length >= 1) {
-                dataId.current = parseInt(diaryList[0].id) + 1;
-                dispatch({ type: "INIT", data: diaryList });
-            }
-        }
+    //         if (diaryList.length >= 1) {
+    //             dataId.current = parseInt(diaryList[0].id) + 1;
+    //             dispatch({ type: "INIT", data: diaryList });
+    //         }
+    //     }
+    // }, []);
+
+    useEffect(() => {
+        fetch("/api/v1/diarys")
+            .then((res) => res.json())
+            .then((diaryList) => {
+                if (diaryList) {
+                    diaryList.sort((a, b) => b.id - a.id);
+                    if (diaryList.length >= 1) {
+                        dataId.current = parseInt(diaryList[0].id) + 1;
+                        dispatch({ type: "INIT", data: diaryList });
+                    }
+                }
+            });
     }, []);
 
     //Create
     const onCreate = (date, content, emotion) => {
-        dispatch({
-            type: "CREATE",
-            data: {
-                id: dataId.current,
-                date: new Date(date).getTime(),
-                content,
-                emotion,
-            },
-        });
-        dataId.current += 1;
+        const postData = {
+            id: dataId.current,
+            date: new Date(date).toLocaleDateString(),
+            content,
+            emotion,
+        };
+        const requestOptions = {
+            method: "POST",
+            async: false,
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(postData),
+        };
+        fetch("api/v1/diarys", requestOptions)
+            .then((res) => res.json())
+            .then((resData) => {
+                dispatch({
+                    type: "CREATE",
+                    data: resData,
+                });
+                dataId.current += 1;
+            });
     };
 
     //Remove
@@ -81,7 +106,7 @@ function App() {
             type: "EDIT",
             data: {
                 id: targetId,
-                date: new Date(date).getTime(),
+                date: new Date(date).toLocaleDateString(),
                 content,
                 emotion,
             },

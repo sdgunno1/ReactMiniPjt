@@ -7,7 +7,7 @@ const DiaryItem = ({ id, emotion, content, date }) => {
     const env = process.env;
     env.PUBLIC_URL = env.PUBLIC_URL || "";
 
-    const strDate = new Date(parseInt(date)).toLocaleDateString();
+    const strDate = new Date(date).toLocaleDateString();
     const goDetail = () => {
         navigate(`/diary/${id}`);
     };
