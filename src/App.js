@@ -32,6 +32,7 @@ const reducer = (state, action) => {
     }
 
     //localStorage.setItem("diary", JSON.stringify(newState));
+    //console.log(newState);
     return newState;
 };
 
@@ -80,11 +81,10 @@ function App() {
         };
         const requestOptions = {
             method: "POST",
-            async: false,
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(postData),
         };
-        fetch("api/v1/diarys", requestOptions)
+        fetch("/api/v1/diarys", requestOptions)
             .then((res) => res.json())
             .then((resData) => {
                 dispatch({
@@ -97,20 +97,39 @@ function App() {
 
     //Remove
     const onRemove = (targetId) => {
-        dispatch({ type: "REMOVE", targetId });
+        const requestOptions = {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(targetId),
+        };
+        fetch(`/api/v1/diarys/${targetId}`, requestOptions)
+            .then((res) => res.json())
+            .then((resData) => {
+                dispatch({ type: "REMOVE", targetId });
+            });
     };
 
     //Edit
     const onEdit = (targetId, date, content, emotion) => {
-        dispatch({
-            type: "EDIT",
-            data: {
-                id: targetId,
-                date: new Date(date).toLocaleDateString(),
-                content,
-                emotion,
-            },
-        });
+        const putData = {
+            id: targetId,
+            date: new Date(date).toLocaleDateString(),
+            content,
+            emotion,
+        };
+        const requestOption = {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(putData),
+        };
+        fetch(`/api/v1/diarys/${targetId}`, requestOption)
+            .then((res) => res.json())
+            .then((resData) => {
+                dispatch({
+                    type: "EDIT",
+                    data: resData,
+                });
+            });
     };
 
     return (

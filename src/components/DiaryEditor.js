@@ -56,7 +56,6 @@ const DiaryEditor = ({ isEdit, originData }) => {
         if (isEdit) {
             const diaryDate = new Date(originData.date);
             diaryDate.setDate(diaryDate.getDate() + 1);
-            console.log(getStringDate(diaryDate));
             setDate(getStringDate(diaryDate));
             setEmotion(originData.emotion);
             setContent(originData.content);

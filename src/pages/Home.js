@@ -11,35 +11,25 @@ const Home = () => {
     const headText = `${curDate.getFullYear()}년 ${curDate.getMonth() + 1}`;
 
     useEffect(() => {
-        if (diaryList.length >= 1) {
-            const firstDay = new Date(
-                curDate.getFullYear(),
-                curDate.getMonth(),
-                1
-            );
+        const firstDay = new Date(curDate.getFullYear(), curDate.getMonth(), 1);
 
-            const lastDay = new Date(
-                curDate.getFullYear(),
-                curDate.getMonth() + 1,
-                0,
-                23,
-                59,
-                59
-            );
+        const lastDay = new Date(
+            curDate.getFullYear(),
+            curDate.getMonth() + 1,
+            0,
+            23,
+            59,
+            59
+        );
 
-            setData(
-                diaryList.filter((it) => {
-                    //console.log(firstDay);
-                    //console.log(new Date(it.date).toLocaleString());
-                    //console.log(lastDay);
-                    return (
-                        firstDay <= new Date(it.date) &&
-                        new Date(it.date) <= lastDay
-                    );
-                })
-            );
-            console.log(data);
-        }
+        setData(
+            diaryList.filter((it) => {
+                return (
+                    firstDay <= new Date(it.date) &&
+                    new Date(it.date) <= lastDay
+                );
+            })
+        );
     }, [diaryList, curDate]);
 
     useEffect(() => {
