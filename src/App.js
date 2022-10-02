@@ -6,6 +6,7 @@ import Home from "./pages/Home";
 import New from "./pages/New";
 import Edit from "./pages/Edit";
 import Diary from "./pages/Diary";
+import { getStringDate } from "./util/date.js";
 
 const reducer = (state, action) => {
     let newState = [];
@@ -74,7 +75,7 @@ function App() {
     const onCreate = (date, content, emotion) => {
         const postData = {
             id: dataId.current,
-            date: new Date(date).toLocaleDateString(),
+            date: getStringDate(new Date(date)),
             content,
             emotion,
         };
@@ -112,7 +113,7 @@ function App() {
     const onEdit = (targetId, date, content, emotion) => {
         const putData = {
             id: targetId,
-            date: new Date(date).toLocaleDateString(),
+            date: getStringDate(new Date(date)),
             content,
             emotion,
         };
