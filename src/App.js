@@ -32,7 +32,6 @@ const reducer = (state, action) => {
     }
 
     //localStorage.setItem("diary", JSON.stringify(newState));
-    //console.log(newState);
     return newState;
 };
 
