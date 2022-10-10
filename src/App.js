@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useRef } from "react";
+import React, { useEffect, useReducer, useRef, useCallback } from "react";
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
@@ -72,7 +72,7 @@ function App() {
     }, []);
 
     //Create
-    const onCreate = (date, content, emotion) => {
+    const onCreate = useCallback((date, content, emotion) => {
         const postData = {
             id: dataId.current,
             date: getStringDate(new Date(date)),
@@ -93,10 +93,10 @@ function App() {
                 });
                 dataId.current += 1;
             });
-    };
+    }, []);
 
     //Remove
-    const onRemove = (targetId) => {
+    const onRemove = useCallback((targetId) => {
         const requestOptions = {
             method: "DELETE",
             headers: { "Content-Type": "application/json" },
@@ -107,10 +107,10 @@ function App() {
             .then((resData) => {
                 dispatch({ type: "REMOVE", targetId });
             });
-    };
+    }, []);
 
     //Edit
-    const onEdit = (targetId, date, content, emotion) => {
+    const onEdit = useCallback((targetId, date, content, emotion) => {
         const putData = {
             id: targetId,
             date: getStringDate(new Date(date)),
@@ -130,7 +130,7 @@ function App() {
                     data: resData,
                 });
             });
-    };
+    }, []);
 
     return (
         <DiaryStateContext.Provider value={data}>
