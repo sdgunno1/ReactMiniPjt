@@ -61,12 +61,10 @@ function App() {
         fetch("/api/v1/diarys")
             .then((res) => res.json())
             .then((diaryList) => {
-                if (diaryList) {
+                if (diaryList.length > 0) {
                     diaryList.sort((a, b) => b.id - a.id);
-                    if (diaryList.length >= 1) {
-                        dataId.current = parseInt(diaryList[0].id) + 1;
-                        dispatch({ type: "INIT", data: diaryList });
-                    }
+                    dataId.current = parseInt(diaryList[0].id) + 1;
+                    dispatch({ type: "INIT", data: diaryList });
                 }
             });
     }, []);

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import DiaryItem from "./DiaryItem";
 import MyButton from "./MyButton";
@@ -57,8 +57,7 @@ const DiaryList = ({ diaryList }) => {
             filter === "all"
                 ? copyList
                 : copyList.filter((it) => filterCallback(it));
-        const sortedList = filteredList.sort(compare);
-        return sortedList;
+        return filteredList.sort(compare);
     };
 
     return (

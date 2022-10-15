@@ -39,7 +39,7 @@ const DiaryEditor = ({ isEdit, originData }) => {
                 onEdit(originData.id, date, content, emotion);
             }
         } else {
-            return;
+            return; // 작성 취소(없으면 뒤로가기 됨)
         }
 
         navigate("/", { replace: true });

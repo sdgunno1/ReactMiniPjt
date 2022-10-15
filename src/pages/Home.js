@@ -23,12 +23,11 @@ const Home = () => {
         );
 
         setData(
-            diaryList.filter((it) => {
-                return (
+            diaryList.filter(
+                (it) =>
                     firstDay <= new Date(it.date) &&
                     new Date(it.date) <= lastDay
-                );
-            })
+            )
         );
     }, [diaryList, curDate]);
 
